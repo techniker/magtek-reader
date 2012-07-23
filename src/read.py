@@ -13,7 +13,7 @@ import usb.util
 #USB ID def
 VENDOR_ID = 0x0801
 PRODUCT_ID = 0x0002
-DATA_SIZE = 331 #datasize of reader output 373
+DATA_SIZE = 329 #datasize of reader output 373
 
 def chunks(l, n):
     for i in xrange(0, len(l), n):
@@ -37,7 +37,7 @@ class MagSwipe:
         # set configuration
         try:
             device.set_configuration()
-          #  device.reset()
+            device.reset()
         except usb.core.USBError as e:
             sys.exit("error setting configuration: %s" % str(e))
 
@@ -66,11 +66,9 @@ class MagSwipe:
                         swiped = False
                         continue
                     else:
+			print "Data: %s" % '' .join(map(chr, data))
                         break   # got data
 
-        # convert text
-        map_keys = lambda c: key_pages_shift[c[1]] if c[0] is 2 else key_pages[c[1]]
-        data = "".join(map(map_keys, [(d[0], d[2]) for d in chunks(data, 8)]))
         return data
 
 if __name__ == "__main__":
